@@ -10,19 +10,25 @@ const {PrismaClient} = require('@prisma/client')
 
 
 //Função para inserir uma nova musica no banco de dados
-const insertMusica = async function(){
-     //instanciando (criar novo objeto) para realizar a manipulação do spript SQL
-    const prisma = new PrismaClient() 
+const insertMusica = async function(musica){
+    
+    try {
+        
+    
+        //instanciando (criar novo objeto) para realizar a manipulação do spript SQL
+        const prisma = new PrismaClient() 
 
-    let sql = `insert into tbl_musica (nome,
+        let sql = `insert into tbl_musica (nome,
                                         link,
                                         duracao,
-                                        data_lancamento
+                                        data_lancamento,
                                         foto_capa,
                                         letra
                                       )
                                 values( 
                                             '${musica.nome}',
+                                            '${musica.link}',
+
                                             '${musica.duracao}',
                                             '${musica.data_lancamento}',
                                             '${musica.foto_capa}',
@@ -30,13 +36,19 @@ const insertMusica = async function(){
                                         )`
                                         
 
-// Executa o spript SQL no BD e aguarde o retorno do BD                                        
-     let result = await prisma.$executeRawUnsafe(sql)  
+        // Executa o spript SQL no BD e aguarde o retorno do BD                                        
+        let result = await prisma.$executeRawUnsafe(sql)  
      
-     if (result)
+        if (result)
             return true
         else
-            return false
+         return false
+
+    } catch (error) {
+        return false
+    }
+
+
 }
 
 //função para atualizar uma musica existente no banco de dados

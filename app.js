@@ -22,7 +22,7 @@
 
      const express = require('express')
      const cors = require('cors')
-     const bodyParser = require('cors')
+     const bodyParser = require('body-parser')
      
      //Import das controllers do projeto
      const controllerMusica = require('./controller/musica/controllerMusica.js')
