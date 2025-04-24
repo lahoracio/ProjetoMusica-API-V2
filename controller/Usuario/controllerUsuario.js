@@ -40,54 +40,48 @@ const inserirUsuario = async function(usuario, contentType) {
     }
 }
 
-// Função para atualizar um usuario (ps: id)
-const atualizarUsuario = async function (numero, usuario, contentType) {
-    try {
-        
-        let id = numero 
 
+
+const atualizarUsuario = async function(usuario, id, contentType){
+    try {
         if(String(contentType).toLowerCase() == 'application/json')
-            {
-                if (usuario.nome      == ''        || usuario.nome       == null || usuario.nome       == undefined || usuario.nome.length         > 80 || 
-                    usuario.email          == ''        || usuario.email          == null || usuario.email          == undefined || usario.email.length            > 80 ||
+        {
+            if(
+                usuario.nome      == ''        || usuario.nome       == null || usuario.nome       == undefined || usuario.nome.length         > 80 || 
+                    usuario.email          == ''        || usuario.email          == null || usuario.email          == undefined || usuario.email.length            > 80 ||
                     usuario.senha          == ''        || usuario.senha          == null || usuario.senha          == undefined || usuario.senha.length            > 45 ||
                     usuario.foto_perfil           == undefined || usuario.foto_perfil.length   > 80
-                )
-                {
-                    return message.ERROR_REQUIRED_FIELDS //status code 400
-                }else{
-
-                    //validar se o ID existe no banco 
-                    let result = await usuarioDAO.selectByIdUser(id)
-
-                    if(result != false || typeof(result) == 'object'){
-
-                        if(result.length > 0){
-                            //Update 
-                            //adiciona o atributo ID no JSON e coloca o ID do usuario que chegou na controller
-                            usuario.id = id 
-                            let resultUsuario = await usuarioDAO.updateUsuario(usuario)
-
-                            if(resultUsuario){
-                                return message.SUCESS_UPDATE_ITEM // 200
-                            }else{
-                                return message.ERROR_INTERNAL_SERVER_MODEL // 500
-                            }
-                        }else{
-                            return message.ERROR_NOT_FOUND // 404
-                        }
-                    }
-                }
-        
+            ){
+                return MESSAGE.ERROR_REQUIRE_FIELDS //400
             }else{
-                return message.ERROR_CONTENT_TYPE // 415
+                //validar se o id existe no db
+                let resultUsuario = await buscarUsuario(id)
+
+                if(resultUsuario.status_code == 200){
+                    //update
+                    usuario.id = id //adiciona o atributo id no json e e coloca o id da música que chegou na controller
+                    let result = await usuarioDAO.updateUsuario(usuario)
+
+                    if(result){
+                        return message.SUCESS_UPDATE_ITEM //200
+                    }else{
+                        return message.ERROR_INTERNAL_SERVER_MODEL //500
+                    }
+                }else if(resultUsuario.status_code == 404){
+                    return message.ERROR_NOT_FOUND //404
+                }else{
+                    return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+                }
             }
-    
+        }else{
+            return message.ERROR_CONTENT_TYPE //415
+        }
     } catch (error) {
-        return message.ERROR_INTERNAL_SERVER_CONTROLLER // 500- controller
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
-    
 }
+
+
 
 // Função para excluir um usuário
 const excluirUsuario = async function(numero) {
@@ -99,7 +93,7 @@ const excluirUsuario = async function(numero) {
         }else{
             
             // Antes de excluir, estamos verificando se existe esse id 
-            let resultUsuario = await usuarioDAO.selectByIdUser(id)
+            let resultUsuario = await usuarioDAO.selectByIdUsuario(id)
 
             if(resultUsuario != false || typeof(resultUsuario) == 'object'){
 
@@ -111,20 +105,23 @@ const excluirUsuario = async function(numero) {
                     if(result)
                         return message.SUCESS_DELETED_ITEM // 200
                     else
-                        return message.ERROR_INTERNAL_SERVER_MODEL // 500- model
+                        return message.ERROR_INTERNAL_SERVER_MODEL // 500
 
                 }else{
                     return message.ERROR_NOT_FOUND // 404
                 }
             }else{
-                return message.ERROR_INTERNAL_SERVER_MODEL // 500- model
+                return message.ERROR_INTERNAL_SERVER_CONTROLLER // 500
             }
         }
 
     } catch (error) {
-        return message.ERROR_INTERNAL_SERVER_CONTROLLER // 500- controller
+
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
 }
+
+
 
 //Função para listar todos os usuários
 const listarUsuario = async function() {

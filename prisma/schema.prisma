@@ -6,14 +6,10 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-model tbl_test{
-  id Int @id @default(autoincrement())
-  nome String
 }

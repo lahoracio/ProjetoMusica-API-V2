@@ -40,26 +40,25 @@ const insertUsuario = async function(usuario) {
     }
 }
 
-//Função para atualizar música existente
-const updateUsuario = async function(usuario) {
+//função para atualizar um usuário existente no banco de dados
+const updateUsuario = async function(usuario){
     try {
-        
-        let sql = `update tbl_usuario set nome         = '${usuario.nome}',
-                                          email             = '${usuario.email}',
-                                          senha             = '${usuario.senha}',
-                                          foto_perfil            = '${usuario.foto_perfil}'
-                                    where id        =  ${usuario.id}`
-                                        
-        let result = await prisma.$executeRawUnsafe(sql) 
-        
-        if (result)
+        let sql = `update tbl_usuario set nome = '${usuario.nome}',
+                                          email = '${usuario.email}',
+                                          senha = '${usuario.senha}',
+                                          foto_perfil= '${usuario.foto_perfil}'
+                                where id=${usuario.id}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
             return true
         else
             return false
-                                                                    
-    } catch (error) {
-        return false
-    }
+
+        } catch (error) {
+            return false
+        }
 }
 
 // Função para excluir música existente 
