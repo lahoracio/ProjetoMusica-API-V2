@@ -206,7 +206,7 @@ app.put('/v1/controle-musicas/usuario/:id', cors(), bodyParserJSON, async functi
      ********************************************************************/
 
 // Import das Controller do projeto 
-const controllerGenero = require('./controller/genero/controllerGenero')
+const controllerGenero = require('./controller/Genero/controllerGenero.js')
 
 //endpoint para inserir um genero
 app.post('/v1/controle-musicas/genero', cors(), bodyParserJSON, async function(request, response){
@@ -346,6 +346,166 @@ app.delete('/v1/controle-musicas/artista/:id', cors(), async function(request, r
     response.status(result.status_code)
     response.json(result)
 })
+
+
+ /********************************************************************
+     * Criando mais Endpoints para o projeto 
+     * Autor: Lara Machado 
+     * Data: 17/04/2025
+     * TABELA BANDA
+     * 
+     ********************************************************************/
+
+
+
+ // Import das Controller do projeto 
+const controllerBanda = require('./controller/Banda/controllerBanda.js')
+
+//endpoint para inserir uma banda
+app.post('/v1/controle-musicas/banda', cors(), bodyParserJSON, async function(request, response){
+
+    //recebe o content type da requisição para validar o formato de dados
+    let contentType = request.headers['content-type']
+
+    //recebe os dados encaminhados no body da requisição
+    let dadosBody = request.body
+
+    let result = await controllerBanda.inserirBanda(dadosBody, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+//endpoint para retornar lista de banda
+app.get('/v1/controle-musicas/banda', cors(), async function(request, response){
+
+    //chama a função para retornar uma lista de banda
+    let result = await controllerBanda.listarBanda()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+//endpoint para buscar um banda pelo id
+app.get('/v1/controle-musicas/banda/:id', cors(), async function(request, response){
+
+    let idBanda = request.params.id
+
+    let result = await controllerBanda.buscarBanda(idBanda)
+
+    response.status(result.status_code)
+    response.json(result)
+
+})
+
+//endpoint pr atualizar um banda
+app.put('/v1/controle-musicas/banda/:id', cors(), bodyParserJSON, async function(request, response){
+    //recebe o content type da requisição
+    let contentType = request.headers['content-type']
+
+    //recebe o id da música
+    let idBanda = request.params.id
+
+    //recebe os dados do body
+    let dadosBody = request.body
+
+    let result = await controllerBanda.atualizarBanda(dadosBody, idBanda, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// endpoint para deletar um banda
+app.delete('/v1/controle-musicas/banda/:id', cors(), async function(request, response){
+    let idBanda = request.params.id
+
+    let result = await controllerBanda.excluirBanda(idBanda)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+ /********************************************************************
+     * Criando mais Endpoints para o projeto 
+     * Autor: Lara Machado 
+     * Data: 17/04/2025
+     * TABELA GRAVADORA
+     * 
+     ********************************************************************/
+
+// Import das Controller do projeto 
+const controllerGravadora = require('./controller/Gravadora/controllerGravadora.js')
+
+//EndPoint para inserir uma gravadora  
+app.post('/v1/controle-musicas/gravadora', cors(), bodyParserJSON, async function(request, response){
+
+    // Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    // Recebe os dados do body da requisição 
+    let dadosBody = request.body 
+
+    // Chama a função da controller para inserir os dados e aguarda o retorno da função 
+    let resultGravadora = await controllerGravadora.inserirGravadora(dadosBody, contentType)
+
+    // Resposta e status code 
+    response.status(resultGravadora.status_code)
+    response.json(resultGravadora)
+})
+
+// Endpoint para listar todas as gravadoras
+app.get('/v1/controle-musicas/gravadoras', cors(), async function(request, response){
+
+    let resultGravadora = await controllerGravadora.listarGravadora()
+
+    response.status(resultGravadora.status_code)
+    response.json(resultGravadora)
+})
+
+//Endpoint buscar pelo ID
+app.get('/v1/controle-musicas/gravadora/:id', cors(), async function(request, response){
+
+    //Pegando o ID via params
+    let id = request.params.id
+
+    // Chama a função e manda o id
+    let resultGravadora = await controllerGravadora.buscarGravadora(id)
+
+    response.status(resultGravadora.status_code)
+    response.json(resultGravadora)
+})
+
+// Endpoint para deletar gravadora pelo ID
+app.delete('/v1/controle-musicas/gravadora/:id', cors(), async function(request, response){
+    
+    //Sempre que for buscar pelo ID é por params 
+    let id= request.params.id
+
+    let resultGravadora = await controllerGravadora.excluirGravadora(id)
+
+    response.status(resultGravadora.status_code)
+    response.json(resultGravadora)
+})
+
+//Endpoint para atualizar gravadora pelo ID
+app.put('/v1/controle-musicas/gravadora/:id', cors(), bodyParserJSON, async function(request, response){
+
+    // Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+
+    let idGravadora = request.params.id
+
+    // Recebe os dados da requisição 
+    let dadosBody = request.body
+
+    // Chama a função e encaminha os argumentos: ID, Body e ContentType
+    let resultGravadora = await controllerGravadora.atualizarGravadora(idGravadora, dadosBody, contentType)
+
+    response.status(resultGravadora.status_code)
+    response.json(resultGravadora)
+})
+
+
 
 app.listen(8080, function (){
     console.log('Servidor aguardando novas requisições...')
