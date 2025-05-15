@@ -106,7 +106,7 @@ const excluirGravadora = async function(numero) {
                     let result = await gravadoraDAO.deleteGravadora(id)
                     
                     if(result)
-                        return message.SUCESS_DELETE_ITEM // 200
+                        return message.SUCCESS_DELETED_ITEM // 200
                     else
                         return message.ERROR_INTERNAL_SERVER_MODEL // 500- model
 
