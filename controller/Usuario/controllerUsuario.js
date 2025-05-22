@@ -28,7 +28,7 @@ const inserirUsuario = async function(usuario, contentType) {
                 let resultUsuario = await usuarioDAO.insertUsuario(usuario)
 
                 if(resultUsuario)
-                    return message.SUCESS_CREATED_ITEM //status code 201
+                    return message.SUCCESS_CREATED_ITEM //status code 201
                 else
                     return message.ERROR_INTERNAL_SERVER_MODEL //status code 500 
             }
@@ -52,7 +52,7 @@ const atualizarUsuario = async function(usuario, id, contentType){
                     usuario.senha          == ''        || usuario.senha          == null || usuario.senha          == undefined || usuario.senha.length            > 45 ||
                     usuario.foto_perfil           == undefined || usuario.foto_perfil.length   > 80
             ){
-                return MESSAGE.ERROR_REQUIRE_FIELDS //400
+                return message.ERROR_REQUIRE_FIELDS //400
             }else{
                 //validar se o id existe no db
                 let resultUsuario = await buscarUsuario(id)
@@ -63,7 +63,7 @@ const atualizarUsuario = async function(usuario, id, contentType){
                     let result = await usuarioDAO.updateUsuario(usuario)
 
                     if(result){
-                        return message.SUCESS_UPDATE_ITEM //200
+                        return message.SUCCESS_UPDATED_ITEM //200
                     }else{
                         return message.ERROR_INTERNAL_SERVER_MODEL //500
                     }
@@ -89,7 +89,7 @@ const excluirUsuario = async function(numero) {
         let id = numero
 
         if ( id == ''|| id == null || id == undefined || isNaN(id)){
-            return message.ERROR_REQUIRED_FIELDS // status code 400
+            return message.ERROR_REQUIRE_FIELDS // status code 400
         }else{
             
             // Antes de excluir, estamos verificando se existe esse id 
@@ -103,7 +103,7 @@ const excluirUsuario = async function(numero) {
                     let result = await usuarioDAO.deleteUsuario(id)
                     
                     if(result)
-                        return message.SUCESS_DELETED_ITEM // 200
+                        return message.SUCCESS_DELETED_ITEM // 200
                     else
                         return message.ERROR_INTERNAL_SERVER_MODEL // 500
 
@@ -163,7 +163,7 @@ const buscarUsuario = async function(numero) {
 
         
         if ( id == ''|| id == null || id == undefined || isNaN(id)){
-            return message.ERROR_REQUIRED_FIELDS // status code 400
+            return message.ERROR_REQUIRE_FIELDS // status code 400
 
         }else{
 
